@@ -1,17 +1,16 @@
-// Require the framework and instantiate it
-const fastify = require('fastify')({
-    logger: true
-})
+const express = require("express");
 const getServers = require('./data.js')
+
 let serverInfos = [],serverDatas = null
+const app = express();
+app.use(express.static("public"));
 
-// Declare a route
-fastify.get('/', async (request, reply) => {
-    return 
-})
+app.get("/", function(request, response) {
+    response.sendFile(__dirname + "/views/index.html");
+});
 
-fastify.get('/api', async (request, reply) => {
-    return serverDatas
+app.get('/api', async  function(request, response) {
+    response.json(serverDatas);
 })
 
 // Run the server!
@@ -27,8 +26,9 @@ const start = async () => {
     try {
         await updateServers();
         setInterval(await updateServers,300*1000)
-        await fastify.listen(3000)
-        fastify.log.info(`server listening on ${fastify.server.address().port}`)
+        const listener = app.listen(process.env.PORT, function() {
+            console.log("Your app is listening on port " + listener.address().port);
+        });
     } catch (err) {
         fastify.log.error(err)
         process.exit(1)
