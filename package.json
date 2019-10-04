@@ -10,7 +10,11 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "fast-xml-parser": "^3.13.0",
+    "fastify": "^2.9.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   },
   "engines": {
     "node": "8.x"

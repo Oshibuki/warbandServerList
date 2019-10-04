@@ -1,22 +1,37 @@
-// server.js
-// where your node app starts
+// Require the framework and instantiate it
+const fastify = require('fastify')({
+    logger: true
+})
+const getServers = require('./data.js')
+let serverInfos = [],serverDatas = null
 
-// init project
-const express = require("express");
-const app = express();
+// Declare a route
+fastify.get('/', async (request, reply) => {
+    return { hello: 'world' }
+})
 
-// we've started you off with Express,
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
+fastify.get('/api', async (request, reply) => {
+    return serverDatas
+})
 
-// http://expressjs.com/en/starter/static-files.html
-app.use(express.static("public"));
+// Run the server!
+const start = async () => {
+    async function updateServers() {
+        serverInfos = await getServers()
+        serverDatas = {
+            data: serverInfos,
+            created: new Date()
+        }
+    }
 
-// http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function(request, response) {
-  response.sendFile(__dirname + "/views/index.html");
-});
-
-// listen for requests :)
-const listener = app.listen(process.env.PORT, function() {
-  console.log("Your app is listening on port " + listener.address().port);
-});
+    try {
+        await updateServers();
+        setInterval(await updateServers,300*1000)
+        await fastify.listen(3000)
+        fastify.log.info(`server listening on ${fastify.server.address().port}`)
+    } catch (err) {
+        fastify.log.error(err)
+        process.exit(1)
+    }
+}
+start()
