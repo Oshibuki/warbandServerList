@@ -7,7 +7,7 @@ let serverInfos = [],serverDatas = null
 
 // Declare a route
 fastify.get('/', async (request, reply) => {
-    return { hello: 'world' }
+    return 
 })
 
 fastify.get('/api', async (request, reply) => {
