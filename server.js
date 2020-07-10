@@ -27,7 +27,7 @@ const start = async () => {
     try {
         await updateServers();
         setInterval(await updateServers,parseInt(process.env.updateDelay))
-        const listener = app.listen(3001, function() {
+        const listener = app.listen(process.env.PORT || 3001, function() {
             console.log("Your app is listening on port " + listener.address().port);
         });
     } catch (err) {
