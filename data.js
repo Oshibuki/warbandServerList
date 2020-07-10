@@ -28,14 +28,21 @@ async function getServerInfos(ipList) {
                 });
 
                 client.on('close', function (data) {
+					client.end()
+                    client.destroy();
                     var json = parser.parse(bodyString);
-                    resolve(json.ServerStats)
+                    resolve({...json.ServerStats,IP:`${ip}:${port}`})
+                   
                 });
 
                 client.on('error', function (error) {
-                    reject()
+                    client.end()
+                    client.destroy();
+                    reject(error)
                 });
                 client.on('timeout', function (error) {
+                    client.end()
+                    client.destroy();
                     reject(error)
                 });
             } catch (e) {
@@ -57,13 +64,15 @@ async function getServerInfos(ipList) {
     promises = promises.map(reflect)
     const results = await Promise.all(promises);
     const successfulResults = results.filter(p => p.status === 'fulfilled');
-    successfulResults.forEach(i=>serverListInfos.push(i.value))
+    successfulResults.forEach(i=> {
+        if (i.value) serverListInfos.push(i.value)
+    })
     return  serverListInfos
 }
 
 
 function getServers() {
-    return rp(process.env.sourceUrl).then(htmlString=>{
+    return rp('http://warbandmain.taleworlds.com/handlerservers.ashx?type=list').then(htmlString=>{
         let ipList = htmlString.split('|')
         return getServerInfos(ipList)
     })

@@ -1,42 +1,76 @@
- application.togglePrettierEnabled()// client-side js
-// run by the browser each time your view template is loaded
+let apiUrl = location.origin+'/api'
+Vue.component('demo-grid', {
+  template: '#grid-template',
+  props: {
+    columns: Array,
+    filterKey: String
+  },
+  data: function () {
+    var sortOrders = {}
+    this.columns.forEach(function (key) {
+      sortOrders[key] = 1
+    })
+    return {
+      sortKey: '',
+      servers:[],
+      sortOrders: sortOrders,
+    }
+  },
+  computed: {
+    filteredServers: function () {
+      var sortKey = this.sortKey
+      var filterKey = this.filterKey && this.filterKey.toLowerCase()
+      var order = this.sortOrders[sortKey] || 1
+      var servers = this.servers
+      if (filterKey) {
+        servers = servers.filter(function (row) {
+          return Object.keys(row).some(function (key) {
+            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+          })
+        })
+      }
+      if (sortKey) {
+        console.log(servers)
+        servers = servers.slice().sort(function (a, b) {
+          a = a[sortKey]
+          b = b[sortKey]
+          return (a === b ? 0 : a > b ? 1 : -1) * order
+        })
+      }
+      return servers
+    }
+  },
+  filters: {
+    capitalize: function (str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    }
+  },
+  methods: {
+    sortBy: function (key) {
+      this.sortKey = key
+      this.sortOrders[key] = this.sortOrders[key] * -1
+    },
+    fetchData: function () {
+      var xhr = new XMLHttpRequest()
+      var self = this
+      xhr.open('GET', apiUrl)
+      xhr.onload = function () {
+        self.servers = JSON.parse(xhr.responseText).data
+      }
+      xhr.send()
+    }
+  },
+  created:function(){
+    this.fetchData()
+  },
+})
 
-console.log("hello world :o");
+// bootstrap the demo
+var demo = new Vue({
+  el: '#demo',
+  data: {
+    searchQuery: '',
+    gridColumns: ['Name','ModuleName','MapName','NumberOfActivePlayers','HasPassword','IP']
+  },
 
-// our default array of dreams
-const dreams = [
-  "Find and count some sheep",
-  "Climb a really tall mountain",
-  "Wash the dishes"
-];
-
-// define variables that reference elements on our page
-const dreamsList = document.getElementById("dreams");
-const dreamsForm = document.forms[0];
-const dreamInput = dreamsForm.elements["dream"];
-
-// a helper function that creates a list item for a given dream
-const appendNewDream = function(dream) {
-  const newListItem = document.createElement("li");
-  newListItem.innerHTML = dream;
-  dreamsList.appendChild(newListItem);
-};
-
-// iterate through every dream and add it to our page
-dreams.forEach(function(dream) {
-  appendNewDream(dream);
-});
-
-// listen for the form to be submitted and add a new dream when it is
-dreamsForm.onsubmit = function(event) {
-  // stop our form submission from refreshing the page
-  event.preventDefault();
-
-  // get dream value and add it to the list
-  dreams.push(dreamInput.value);
-  appendNewDream(dreamInput.value);
-
-  // reset form
-  dreamInput.value = "";
-  dreamInput.focus();
-};
+})

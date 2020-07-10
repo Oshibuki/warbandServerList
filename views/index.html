@@ -40,7 +40,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="entry in filteredHeroes">
+      <tr v-for="entry in filteredServers">
         <td v-for="key in columns">
           {{entry[key]}}
         </td>
@@ -55,7 +55,6 @@
     Search <input name="query" v-model="searchQuery">
   </form>
   <demo-grid
-    :heroes="gridData"
     :columns="gridColumns"
     :filter-key="searchQuery">
   </demo-grid>

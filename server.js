@@ -1,5 +1,6 @@
 const express = require("express");
 const getServers = require('./data.js')
+require('dotenv').config()
 
 let serverInfos = [],serverDatas = null
 const app = express();
@@ -25,12 +26,12 @@ const start = async () => {
 
     try {
         await updateServers();
-        setInterval(await updateServers,300*1000)
-        const listener = app.listen(process.env.PORT, function() {
+        setInterval(await updateServers,parseInt(process.env.updateDelay))
+        const listener = app.listen(9999, function() {
             console.log("Your app is listening on port " + listener.address().port);
         });
     } catch (err) {
-        fastify.log.error(err)
+        console.error(err)
         process.exit(1)
     }
 }
