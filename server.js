@@ -4,6 +4,8 @@ require('dotenv').config()
 
 let serverInfos = [],serverDatas = null
 const app = express();
+
+app.use(express.compress());
 app.use(express.static("public"));
 
 app.get("/", function(request, response) {
