@@ -16,6 +16,9 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
+  "engines": {
+    "node": "12.x"
+  },
   "repository": {
     "url": "https://glitch.com/edit/#!/hello-express"
   },
