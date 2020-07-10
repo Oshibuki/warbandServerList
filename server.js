@@ -1,11 +1,12 @@
 const express = require("express");
 const getServers = require('./data.js')
+const compression = require('compression')
 require('dotenv').config()
 
 let serverInfos = [],serverDatas = null
 const app = express();
 
-app.use(express.compress());
+app.use(compression())
 app.use(express.static("public"));
 
 app.get("/", function(request, response) {
