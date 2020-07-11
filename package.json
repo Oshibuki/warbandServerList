@@ -8,7 +8,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "deploy": "git push heroku master"
+    "build:ui": "rm -rf dist && cd ../serverlist && yarn build && cp -r dist ../warbandServers",
+    "deploy": "git push heroku master",
+    "deploy:full": "yarn build:ui && git add . && git commit -m uibuild && yarn deploy",    
+    "logs:prod": "heroku logs"
   },
   "dependencies": {
     "compression": "^1.7.4",
