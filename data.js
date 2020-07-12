@@ -31,8 +31,8 @@ async function getServerInfos(ipList) {
 					client.end()
                     client.destroy();
                     var json = parser.parse(bodyString);
-                    resolve({...json.ServerStats,IP:`${ip}:${port}`})
-                   
+                    // resolve({...json.ServerStats,IP:`${ip}:${port}`})
+                   resolve(json.ServerStats)
                 });
 
                 client.on('error', function (error) {

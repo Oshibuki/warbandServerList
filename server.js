@@ -48,11 +48,6 @@ const start = async () => {
           field: "HasPassword",
           sort: "asc",
         },
-        {
-          label: "IP",
-          field: "IP",
-          sort: "asc",
-        },
       ],
     };
   }
