@@ -24,27 +24,27 @@ const start = async () => {
       rows: serverInfos,
       columns: [
         {
-          label: "Name",
+          label: "名称",
           field: "Name",
           sort: "asc",
         },
         {
-          label: "ModuleName",
-          field: "ModuleName",
-          sort: "asc",
-        },
-        {
-          label: "MapName",
-          field: "MapName",
-          sort: "asc",
-        },
-        {
-          label: "NumberOfActivePlayers",
+          label: "在线人数",
           field: "NumberOfActivePlayers",
           sort: "asc",
         },
         {
-          label: "HasPassword",
+          label: "mod",
+          field: "ModuleName",
+          sort: "asc",
+        },
+        {
+          label: "地图",
+          field: "MapName",
+          sort: "asc",
+        },
+        {
+          label: "是否有密码",
           field: "HasPassword",
           sort: "asc",
         },
